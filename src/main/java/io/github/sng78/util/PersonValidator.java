@@ -1,7 +1,7 @@
 package io.github.sng78.util;
 
-import io.github.sng78.dao.PersonDao;
 import io.github.sng78.models.Person;
+import io.github.sng78.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -10,11 +10,11 @@ import org.springframework.validation.Validator;
 @Component
 public class PersonValidator implements Validator {
 
-    private final PersonDao personDao;
+    private final PersonRepository repository;
 
     @Autowired
-    public PersonValidator(PersonDao personDao) {
-        this.personDao = personDao;
+    public PersonValidator(PersonRepository repository) {
+        this.repository = repository;
     }
 
 
@@ -27,8 +27,8 @@ public class PersonValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
 
-        if (personDao.findByFullName(person.getFullName()).isPresent()) {
-            errors.rejectValue("fullName", "","Человек с таким ФИО существует");
+        if (repository.findByFullName(person.getFullName()).isPresent()) {
+            errors.rejectValue("fullName", "", "Человек с таким ФИО существует");
         }
     }
 }

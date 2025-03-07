@@ -1,7 +1,7 @@
 package io.github.sng78.controllers;
 
-import io.github.sng78.dao.PersonDao;
 import io.github.sng78.models.Person;
+import io.github.sng78.services.PersonService;
 import io.github.sng78.util.PersonValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,25 +14,25 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PersonController {
 
-    private final PersonDao personDao;
+    private final PersonService service;
 
     private final PersonValidator personValidator;
 
-    public PersonController(PersonDao personDao, PersonValidator personValidator) {
-        this.personDao = personDao;
-            this.personValidator = personValidator;
+    public PersonController(PersonService service, PersonValidator personValidator) {
+        this.service = service;
+        this.personValidator = personValidator;
     }
 
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("people", personDao.findAll());
+        model.addAttribute("people", service.findAll());
         return "people/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDao.findById(id));
-        model.addAttribute("books", personDao.getBooksByPersonId(id));
+        model.addAttribute("person", service.findById(id));
+        model.addAttribute("books", service.getBooksByPersonId(id));
         return "people/show";
     }
 
@@ -48,13 +48,13 @@ public class PersonController {
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
-        personDao.save(person);
+        service.save(person);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDao.findById(id));
+        model.addAttribute("person", service.findById(id));
         return "people/edit";
     }
 
@@ -66,13 +66,13 @@ public class PersonController {
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }
-        personDao.update(id, person);
+        service.update(id, person);
         return "redirect:/people";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
-        personDao.delete(id);
+        service.delete(id);
         return "redirect:/people";
     }
 }
