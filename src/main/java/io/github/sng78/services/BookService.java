@@ -4,6 +4,7 @@ import io.github.sng78.models.Book;
 import io.github.sng78.models.Person;
 import io.github.sng78.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,10 @@ public class BookService {
 
     public List<Book> findAll() {
         return repository.findAll();
+    }
+
+    public List<Book> findAll(int page, int booksPerPage) {
+        return repository.findAll(PageRequest.of(page, booksPerPage)).getContent();
     }
 
     public Book findById(int id) {
