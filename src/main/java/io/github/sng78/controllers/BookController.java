@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -100,5 +101,17 @@ public class BookController {
     public String setFree(@PathVariable("id") int id) {
         bookService.setFree(id);
         return "redirect:/books/" + id;
+    }
+
+    @GetMapping("/search")
+    public String search() {
+        return "books/search";
+    }
+
+    @PostMapping("/search")
+    public String search(@RequestParam(value = "search_string", required = false) String searchString, Model model) {
+        List<Book> books = bookService.searchByTitle(searchString);
+        model.addAttribute("books", books);
+        return "books/search";
     }
 }

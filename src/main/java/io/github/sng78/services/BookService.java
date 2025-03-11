@@ -44,6 +44,10 @@ public class BookService {
         return repository.findById(id).orElse(null);
     }
 
+    public List<Book> searchByTitle(String searchString) {
+        return repository.findByTitleStartingWith(searchString);
+    }
+
     @Transactional
     public void save(Book book) {
         repository.save(book);
@@ -51,7 +55,9 @@ public class BookService {
 
     @Transactional
     public void update(int id, Book updatedBook) {
+        Book book = repository.findById(id).orElse(null);
         updatedBook.setId(id);
+        updatedBook.setPerson(book != null ? book.getPerson() : null);
         repository.save(updatedBook);
     }
 
