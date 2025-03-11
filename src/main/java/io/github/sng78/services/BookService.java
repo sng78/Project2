@@ -5,6 +5,7 @@ import io.github.sng78.models.Person;
 import io.github.sng78.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,13 +24,20 @@ public class BookService {
         this.repository = repository;
     }
 
-
-    public List<Book> findAll() {
-        return repository.findAll();
+    public List<Book> findAll(boolean sortByYear) {
+        if (!sortByYear) {
+            return repository.findAll();
+        }
+        return repository.findAll(Sort.by("yearOfPublication"));
     }
 
-    public List<Book> findAll(int page, int booksPerPage) {
-        return repository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+    public List<Book> findAll(int page, int booksPerPage, boolean sortByYear) {
+        if (!sortByYear) {
+            return repository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+        }
+        return repository
+                .findAll(PageRequest.of(page, booksPerPage, Sort.by("yearOfPublication")))
+                .getContent();
     }
 
     public Book findById(int id) {
