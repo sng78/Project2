@@ -27,7 +27,7 @@ public class PersonValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
 
-        if (repository.findByFullName(person.getFullName()).isPresent()) {
+        if (repository.findByFullName(person.getFullName()).isPresent() && repository.findById(person.getId()).isEmpty()) {
             errors.rejectValue("fullName", "", "Человек с таким ФИО существует");
         }
     }
