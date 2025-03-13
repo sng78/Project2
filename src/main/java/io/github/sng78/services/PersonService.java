@@ -31,6 +31,10 @@ public class PersonService {
         return repository.findById(id).orElse(null);
     }
 
+    public Optional<Person> findByFullName(String fullName) {
+        return repository.findByFullName(fullName);
+    }
+
     @Transactional
     public void save(Person person) {
         repository.save(person);
