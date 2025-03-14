@@ -67,17 +67,16 @@ public class BookService {
     }
 
     public Optional<Person> getOwner(int id) {
-        Book book = repository.findById(id).orElse(null);
-        return Optional.ofNullable(Objects.requireNonNull(book).getPerson());
+        return repository.findById(id).map(Book::getPerson);
     }
 
     @Transactional
     public void setBusy(int id, Person person) {
-        findById(id).setPerson(person);
+        repository.findById(id).ifPresent(book -> book.setPerson(person));
     }
 
     @Transactional
     public void setFree(int id) {
-        findById(id).setPerson(null);
+        repository.findById(id).ifPresent(book -> book.setPerson(null));
     }
 }
