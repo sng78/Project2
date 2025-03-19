@@ -17,6 +17,6 @@ VALUES ('Ветров Николай Иванович', 1985),
        ('Носов Тимофей Алексеевич', 1969),
        ('Горохов Артем Исаевич', 1941);
 
-UPDATE book SET person_id=1 WHERE id=1;
-UPDATE book SET person_id=1 WHERE id=2;
-UPDATE book SET person_id=3 WHERE id=5;
+UPDATE book SET person_id=1, was_taken_in='2024-03-18 16:44:35.000000' WHERE id=1;
+UPDATE book SET person_id=1, was_taken_in='2025-03-18 16:44:24.000000' WHERE id=2;
+UPDATE book SET person_id=3, was_taken_in='2024-03-18 16:44:35.000000' WHERE id=5;

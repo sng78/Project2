@@ -14,5 +14,6 @@ CREATE TABLE book
     title               VARCHAR NOT NULL,
     author              VARCHAR NOT NULL,
     year_of_publication INT CHECK (year_of_publication > 1000),
-    person_id           INT     REFERENCES person (id) ON DELETE SET NULL
+    person_id           INT     REFERENCES person (id) ON DELETE SET NULL,
+    was_taken_in        TIMESTAMP
 );
