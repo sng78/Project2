@@ -5,6 +5,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "book")
@@ -33,6 +34,12 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
+
+    @Column(name = "was_taken_in")
+    private LocalDateTime wasTakenIn;
+
+    @Transient
+    private boolean isExpired;
 
     public Book() {
     }
@@ -82,5 +89,21 @@ public class Book {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public LocalDateTime getWasTakenIn() {
+        return wasTakenIn;
+    }
+
+    public void setWasTakenIn(LocalDateTime wasTakenIn) {
+        this.wasTakenIn = wasTakenIn;
+    }
+
+    public boolean isExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
     }
 }

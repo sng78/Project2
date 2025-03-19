@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,11 +72,18 @@ public class BookService {
 
     @Transactional
     public void setBusy(int id, Person person) {
-        repository.findById(id).ifPresent(book -> book.setPerson(person));
+        repository.findById(id).ifPresent(book -> {
+            book.setPerson(person);
+            book.setWasTakenIn(LocalDateTime.now());
+        });
     }
 
     @Transactional
     public void setFree(int id) {
-        repository.findById(id).ifPresent(book -> book.setPerson(null));
+        repository.findById(id).ifPresent(book -> {
+            book.setPerson(null);
+            book.setWasTakenIn(null);
+            book.setExpired(false);
+        });
     }
 }

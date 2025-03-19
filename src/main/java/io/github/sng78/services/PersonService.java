@@ -3,11 +3,12 @@ package io.github.sng78.services;
 import io.github.sng78.models.Book;
 import io.github.sng78.models.Person;
 import io.github.sng78.repositories.PersonRepository;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -54,8 +55,13 @@ public class PersonService {
     public List<Book> getBooksByPersonId(int id) {
         Optional<Person> person = repository.findById(id);
         if (person.isPresent()) {
-            Hibernate.initialize(person.get().getBooks());
-            return person.get().getBooks();
+            // если в методе нет логики, происходит ленивая инициализация, поэтому вызываем ее принудительно
+//            Hibernate.initialize(person.get().getBooks());
+            List<Book> books = person.get().getBooks();
+            books.stream()
+                    .filter(book -> ChronoUnit.DAYS.between(book.getWasTakenIn().toLocalDate(), LocalDate.now()) > 10)
+                    .forEach(book -> book.setExpired(true));
+            return books;
         }
         return Collections.emptyList();
     }
